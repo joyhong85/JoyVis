@@ -126,4 +126,4 @@ def exam_notebook():
     result = 'html/sample_notebook.html'
     nw.show(result)
 
-exam1()
+exam_notebook()
