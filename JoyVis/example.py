@@ -125,3 +125,5 @@ def exam_notebook():
     nw = v.vis(limit=50)
     result = 'html/sample_notebook.html'
     nw.show(result)
+
+exam1()
