@@ -116,3 +116,12 @@ def exam8():
     webbrowser.open('file://' + os.getcwd() + "/" + result)
 
 
+def exam_notebook():
+    """
+    for jupyter notebook
+    :return:
+    """
+    v = Vis('http://localhost:3030/publicdata/query', notebook=True)
+    nw = v.vis(limit=50)
+    result = 'html/sample_notebook.html'
+    nw.show(result)

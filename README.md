@@ -21,6 +21,13 @@ result = 'html/sample8.html'
 nw.show(result)
 ~~~
 
+## For Jupyter Notebook
+~~~python
+v = Vis('http://localhost:3030/publicdata/query', notebook=True)
+nw = v.vis(limit=50)
+result = 'html/sample_notebook.html'
+nw.show(result)
+~~~
 ## Requirements
 - pyvis
 - RDFLib
