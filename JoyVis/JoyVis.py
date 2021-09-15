@@ -219,7 +219,7 @@ class Vis(object):
 
         return self.__run_query(query_string, show_literal)
 
-    def vis_file(self, uri: str = '', show_literal: ShowLiteral = ShowLiteral.Yes):
+    def vis_file(self, uri: str = '', show_literal: ShowLiteral = ShowLiteral.Yes,  limit: int = 500):
         g = Graph()
         g.parse(self.__filepath, format='turtle')
 
@@ -243,8 +243,8 @@ class Vis(object):
                         optional{?o rdfs:label ?olabel .}
                         optional{?o a ?otype}
                       }
-                }
-            """ % (uri, uri))
+                } LIMIT %i
+            """ % (uri, uri, limit))
         else:
             qres = g.query("""
                 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -255,8 +255,8 @@ class Vis(object):
                     optional{?s a ?stype}
                     optional{?o rdfs:label ?olabel .}
                     optional{?o a ?otype}
-                } 
-            """)
+                }  LIMIT %i
+            """ % limit )
         f = open('json_result', 'w')
         JSONResultSerializer(qres).serialize(f)
         with open('json_result') as f:
