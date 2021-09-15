@@ -10,7 +10,8 @@ nw = v.vis(limit=50)
 result = 'html/sample1.html'
 nw.show(result)
 ~~~
-![sample1 result]('JoyVis/img/sample1.png')
+![sample1 result]('https://github.com/joyhong85/JoyVis/blob/main/JoyVis/img/sample1.png')
+
 ## For Local File
 ~~~python
 from JoyVis import Vis
@@ -20,7 +21,7 @@ nw = v.vis_file(limit=200)
 result = 'html/sample8.html'
 nw.show(result)
 ~~~
-![sample1 result]('JoyVis/img/sample8.png')
+![sample1 result]('https://github.com/joyhong85/JoyVis/blob/main/JoyVis/img/sample8.png')
 
 ## For Jupyter Notebook
 ~~~python
