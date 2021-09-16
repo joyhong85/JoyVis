@@ -51,7 +51,8 @@ class Vis(object):
         self.__ignore_property = ignore_property
 
     def __show_graph(self, results, show_literal):
-        nw = Network(height='800px', width='70%', notebook=self.__notebook)
+        width = '100%' if self.__notebook else '70%'
+        nw = Network(height='800px', width=width, notebook=self.__notebook)
 
         node = {}
         groups = {}
