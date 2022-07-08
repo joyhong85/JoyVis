@@ -28,7 +28,6 @@ class Vis(object):
         self.__useArrow = True
         self.__notebook = notebook
 
-
     def __getLocalName(self, node):
         if node.find('/') > 0 and node.find('#') > 0:
             return node[node.rindex('/') + 1:] if node.rindex('/') > node.rindex('#') else node[node.rindex('#') + 1:]
@@ -220,7 +219,7 @@ class Vis(object):
 
         return self.__run_query(query_string, show_literal)
 
-    def vis_file(self, uri: str = '', show_literal: ShowLiteral = ShowLiteral.Yes,  limit: int = 500):
+    def vis_file(self, uri: str = '', show_literal: ShowLiteral = ShowLiteral.Yes, limit: int = 500):
         g = Graph()
         g.parse(self.__filepath, format='turtle')
 
@@ -257,7 +256,7 @@ class Vis(object):
                     optional{?o rdfs:label ?olabel .}
                     optional{?o a ?otype}
                 }  LIMIT %i
-            """ % limit )
+            """ % limit)
         f = open('json_result', 'w')
         JSONResultSerializer(qres).serialize(f)
         with open('json_result') as f:
@@ -266,4 +265,45 @@ class Vis(object):
         nw = self.__show_graph(read_data, show_literal)
         return nw
 
+    def vis_graph(self, uri: str = '', g=None, show_literal: ShowLiteral = ShowLiteral.Yes, limit: int = 500):
+        if uri != '':
+            qres = g.query("""
+                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                SELECT ?s ?p ?o ?slabel ?olabel ?stype ?totype
+                WHERE {
+                    {
+                        filter(?s=<%s>)
+                        ?s ?p ?o.
+                        optional{?s rdfs:label ?slabel .}
+                        optional{?s a ?stype}
+                        optional{?o rdfs:label ?olabel .}
+                        optional{?o a ?otype}
+                      } UNION {
+                        filter(?o=<%s>)
+                        ?s ?p ?o.
+                        optional{?s rdfs:label ?slabel .}
+                        optional{?s a ?stype}
+                        optional{?o rdfs:label ?olabel .}
+                        optional{?o a ?otype}
+                      }
+                } LIMIT %i
+            """ % (uri, uri, limit))
+        else:
+            qres = g.query("""
+                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                SELECT *
+                WHERE {
+                    ?s ?p ?o.
+                    optional{?s rdfs:label ?slabel .}
+                    optional{?s a ?stype}
+                    optional{?o rdfs:label ?olabel .}
+                    optional{?o a ?otype}
+                }  LIMIT %i
+            """ % limit)
+        f = open('json_result', 'w')
+        JSONResultSerializer(qres).serialize(f)
+        with open('json_result') as f:
+            read_data = json.load(f)
 
+        nw = self.__show_graph(read_data, show_literal)
+        return nw
