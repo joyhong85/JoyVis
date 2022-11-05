@@ -6,7 +6,7 @@ def exam1():
     default usage
     :return:
     """
-    v = Vis('http://localhost:3030/publicdata/query')
+    v = Vis('http://localhost:3031/publicdata/query')
     nw = v.vis(limit=50)
     result = 'html/sample1.html'
     nw.show(result)
@@ -121,9 +121,22 @@ def exam_notebook():
     for jupyter notebook
     :return:
     """
-    v = Vis('http://localhost:3030/publicdata/query', notebook=True)
+    v = Vis('http://localhost:3031/medicine/query', notebook=True)
     nw = v.vis(limit=50)
     result = 'html/sample_notebook.html'
     nw.show(result)
 
-exam_notebook()
+# exam_notebook()
+
+def test_graph_nxg():
+    """
+    for jupyter notebook
+    :return:
+    """
+    v = Vis('http://localhost:3031/medicine/query', notebook=True)
+    nw = v.vis_graph(limit=50)
+    print(nw)
+    result = 'html/sample_notebook.html'
+    nw.show(result)
+
+test_graph_nxg()

@@ -14,6 +14,23 @@ class ShowLiteral(Enum):
     InNode = 2
 
 
+def convert_pyvis_graph_to_networkx_graph(pyvis_network:Network, add_edge_weight=True):
+    DG = nx.DiGraph()
+    nodes = [(x, pyvis_network.get_node(x)) for x in pyvis_network.get_nodes()]
+    if add_edge_weight:
+        edges = [(x['from'], x['to'],
+                  {'weight' if k == 'value' else k: int(v) if k == 'value' else v for k, v in x.items() if
+                   k not in {'from', 'to'}}) for x in pyvis_network.get_edges()]
+        DG.add_edges_from(edges)
+    else:
+        edges = [(x['from'], x['to']) for x in pyvis_network.get_edges()]
+        DG.add_edges_from(edges)
+
+    DG.add_nodes_from(nodes)
+
+    return DG
+
+
 class Vis(object):
     """
     SPARQL Endpoint 과 연동하여 특정 트리플들을 시각화하는 도구,
@@ -289,6 +306,7 @@ class Vis(object):
                 } LIMIT %i
             """ % (uri, uri, limit))
         else:
+            g = Graph()
             qres = g.query("""
                 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                 SELECT *
@@ -304,6 +322,11 @@ class Vis(object):
         JSONResultSerializer(qres).serialize(f)
         with open('json_result') as f:
             read_data = json.load(f)
-
+        print(read_data)
         nw = self.__show_graph(read_data, show_literal)
         return nw
+
+    def vis_graph_nxg(self, uri: str = '', g=None, show_literal: ShowLiteral = ShowLiteral.Yes, limit: int = 500):
+        nw = self.vis_graph(uri, g, show_literal, limit)
+        return nw, convert_pyvis_graph_to_networkx_graph(nw)
+
